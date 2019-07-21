@@ -20,4 +20,6 @@ StatsManager.logCounter("PRUEBA_SDK", "PRUEBA_ENVIO")
 // Increases the event "{evento:"NUEVO_EVENTO", id:1234}" under the TAG "PRUEBA SDK"
 StatsManager.logEvent("PRUEBA_SDK", {evento:"NUEVO_EVENTO", id:1234})
 
+// Updates the event "USER_LOGGED" with the data "{evento:"NUEVO_EVENTO", id:1234}" under the TAG "PRUEBA SDK"
+StatsManager.logUniqueEvent("PRUEBA_SDK", "USER_LOGGED", {location:"123456", id:1234})
 ````
