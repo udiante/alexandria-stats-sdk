@@ -13,7 +13,7 @@ module.exports = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIFIER) 
 
     axiosInstance = axios.create({
         baseURL: ALEXANDRIA_HOST + '/stats/',
-        timeout: 100,
+        timeout: 500,
         headers: {
             'x-access-token': ALEXANDRIA_API_KEY,
             'x-no-response': true
@@ -54,7 +54,9 @@ function sendTag(tagToSend, valueToSend) {
                 value: valueToSend
             })
         } catch (error) {
-            
+            if (process.env.ENABLE_DEBUG_LOGS) {
+                console.error(error)
+            }
         }
     }
 }
@@ -73,7 +75,9 @@ function sendEvent(tagToSend, valueToSend) {
                 value: valueToSend
             })
         } catch (error) {
-            
+            if (process.env.ENABLE_DEBUG_LOGS) {
+                console.error(error)
+            }
         }
     }
 }
@@ -94,7 +98,9 @@ function sendUniqueEvent(tagToSend, uniqueIdentifierToSend, valueToSend) {
                 value: valueToSend
             })
         } catch (error) {
-            
+            if (process.env.ENABLE_DEBUG_LOGS) {
+                console.error(error)
+            }
         }
     }
 }

@@ -10,7 +10,8 @@
             "name": "Launch Index.js",
             "program": "${workspaceFolder}/index.js",
             "env": {
-                "EXAMPLE_NODE_ENV" : ""
+                "EXAMPLE_NODE_ENV" : "",
+                "ENABLE_DEBUG_LOGS" : "true"
             }
         },
         {
@@ -19,7 +20,8 @@
             "name": "Exectue Test",
             "program": "${workspaceFolder}/.vscode/test/index-tests.js",
             "env": {
-                "EXAMPLE_NODE_ENV" : ""
+                "EXAMPLE_NODE_ENV" : "",
+                "ENABLE_DEBUG_LOGS" : "true"
             }
         },
     ]
