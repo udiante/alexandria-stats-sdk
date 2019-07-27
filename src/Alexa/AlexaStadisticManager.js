@@ -3,15 +3,17 @@ const ENABLE_LOGS = (process.env.ENABLE_DEBUG_LOGS == 'true')
 
 const ALEXA_CONSTANT_EVENTS = {
     NO_LOCALE: 'NO_LOCALE',
-    NO_APL_SUPORT = 'NO_APL_SUPPORTED',
-    HAS_UNKNOWN_APL_SUPORT = 'UNKNOWN_APL_SUPPORTED'
+    NO_APL_SUPORT: 'NO_APL_SUPPORTED',
+    HAS_UNKNOWN_APL_SUPORT: 'UNKNOWN_APL_SUPPORTED'
 }
 
 const ALEX_EVENTS = {
     USER_START_INTENT: "USER_START_INTENT",
     INTENT_DEVICE_DATA: 'INTENT_DEVICE_DATA',
     USERS_RETENTION: 'USERS_RETENTION',
-    CUSTOM_DATA: 'CUSTOM_DATA'
+    CUSTOM_DATA: 'CUSTOM_DATA',
+    APL_SUPPORT: 'INTENT_APL_SUPPORT',
+    LOCALES: 'INTENT_LOCALES'
 }
 
 module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier) {
@@ -38,8 +40,8 @@ module.exports.logStartIntent = function (intentHandler) {
 
 module.exports.logIntentProperties = function (intentHandler) {
     try {
-        AlexandriaStatsManager.logCounter(ALEX_EVENTS.INTENT_DEVICE_DATA, getAPLDevice(intentHandler))
-        AlexandriaStatsManager.logCounter(ALEX_EVENTS.INTENT_DEVICE_DATA, getLocale(intentHandler))
+        AlexandriaStatsManager.logCounter(ALEX_EVENTS.APL_SUPPORT, getAPLDevice(intentHandler))
+        AlexandriaStatsManager.logCounter(ALEX_EVENTS.LOCALES, getLocale(intentHandler))
     } catch (error) {
         if (ENABLE_LOGS) {
             console.log(error)
