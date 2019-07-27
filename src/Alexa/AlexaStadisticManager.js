@@ -58,7 +58,7 @@ module.exports.logValue = function (tag, event) {
  * Logs an intent
  */
 module.exports.logIntentUsage = function (intentIdentifier) {
-    AlexandriaStatsManager.sendEvent(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
+    AlexandriaStatsManager.sendTag(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
 }
 
 function getUserIdentifier(intentHandler) {
@@ -69,12 +69,17 @@ function getUserIdentifier(intentHandler) {
     }
 }
 
+const crypto = require('crypto')
+function obfuscateData(string) {
+    return crypto.createHash('sha1').update(string).digest("base64")
+}
+
 function getAPLDevice(intentHandler) {
     try {
-        if (!intentHandler.intentData.supportsAPL) {
-            return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
+        if (intentHandler.intentData.supportsAPL) {
+            return ALEXA_CONSTANT_EVENTS.HAS_UNKNOWN_APL_SUPORT
         }
-        return ALEXA_CONSTANT_EVENTS.HAS_UNKNOWN_APL_SUPORT
+        return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
     } catch (error) {
         return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
     }
