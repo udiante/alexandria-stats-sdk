@@ -31,7 +31,7 @@ module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier)
 // Exposed functionality
 
 /**
- * 
+ * Sends a tag as a counter under the defined tag
  * @param {string} tagToSend 
  * @param {string} valueToSend 
  */
@@ -52,7 +52,7 @@ module.exports.sendTag = function sendTag(tagToSend, valueToSend) {
 }
 
 /**
- * 
+ * Sends a object under the defined tag
  * @param {string} tagToSend 
  * @param {string} valueToSend 
  */
@@ -73,7 +73,7 @@ module.exports.sendEvent = function sendEvent(tagToSend, valueToSend) {
 }
 
 /**
- * 
+ * Sends a object under the defined tag, that will be stored without duplicates
  * @param {string} tagToSend 
  * @param {string} uniqueIdentifierToSend 
  * @param {string} valueToSend 

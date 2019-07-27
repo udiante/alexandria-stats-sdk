@@ -26,8 +26,8 @@ module.exports.logStartIntent = function (intentHandler) {
     try {
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
-            AlexandriaStatsManager.logCounter(ALEX_EVENTS.USERS_RETENTION, userIdentifier)
-            AlexandriaStatsManager.logUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, {
+            AlexandriaStatsManager.sendTag(ALEX_EVENTS.USERS_RETENTION, userIdentifier)
+            AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, {
                 APL: getAPLDevice(intentHandler),
                 LOCALE: getLocale(intentHandler)
             })
@@ -41,8 +41,8 @@ module.exports.logStartIntent = function (intentHandler) {
 
 module.exports.logIntentProperties = function (intentHandler) {
     try {
-        AlexandriaStatsManager.logCounter(ALEX_EVENTS.APL_SUPPORT, getAPLDevice(intentHandler))
-        AlexandriaStatsManager.logCounter(ALEX_EVENTS.LOCALES, getLocale(intentHandler))
+        AlexandriaStatsManager.sendEvent(ALEX_EVENTS.APL_SUPPORT, getAPLDevice(intentHandler))
+        AlexandriaStatsManager.sendEvent(ALEX_EVENTS.LOCALES, getLocale(intentHandler))
     } catch (error) {
         if (ENABLE_LOGS) {
             console.log(error)
@@ -51,14 +51,14 @@ module.exports.logIntentProperties = function (intentHandler) {
 }
 
 module.exports.logValue = function (tag, event) {
-    AlexandriaStatsManager.logCounter(tag || ALEX_EVENTS.CUSTOM_DATA, event)
+    AlexandriaStatsManager.sendEvent(tag || ALEX_EVENTS.CUSTOM_DATA, event)
 }
 
 /** 
  * Logs an intent
  */
 module.exports.logIntentUsage = function (intentIdentifier) {
-    AlexandriaStatsManager.logCounter(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
+    AlexandriaStatsManager.sendEvent(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
 }
 
 function getUserIdentifier(intentHandler) {
