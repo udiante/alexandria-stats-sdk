@@ -12,6 +12,7 @@ const ALEX_EVENTS = {
     INTENT_DEVICE_DATA: 'INTENT_DEVICE_DATA',
     USERS_RETENTION: 'USERS_RETENTION',
     CUSTOM_DATA: 'CUSTOM_DATA',
+    INTENT_USAGE: 'INTENT_USAGE',
     APL_SUPPORT: 'INTENT_APL_SUPPORT',
     LOCALES: 'INTENT_LOCALES'
 }
@@ -51,6 +52,13 @@ module.exports.logIntentProperties = function (intentHandler) {
 
 module.exports.logValue = function (tag, event) {
     AlexandriaStatsManager.logCounter(tag || ALEX_EVENTS.CUSTOM_DATA, event)
+}
+
+/** 
+ * Logs an intent
+ */
+module.exports.logIntentUsage = function (intentIdentifier) {
+    AlexandriaStatsManager.logCounter(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
 }
 
 function getUserIdentifier(intentHandler) {
