@@ -76,7 +76,7 @@ function obfuscateData(string) {
 
 function getAPLDevice(intentHandler) {
     try {
-        if (intentHandler.intentData.supportsAPL) {
+        if (intentHandler.intentData.suportsAPL || intentHandler.intentData.APL || intentHandler.intentData.supportsAPL) {
             return ALEXA_CONSTANT_EVENTS.HAS_UNKNOWN_APL_SUPORT
         }
         return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
