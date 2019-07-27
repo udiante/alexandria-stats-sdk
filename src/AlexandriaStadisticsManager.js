@@ -6,13 +6,14 @@ var host
 var apiKey
 var appIdentifier
 
-module.exports = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIFIER) {
+
+module.exports.init = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIFIER) {
     host = ALEXANDRIA_HOST
     apiKey = ALEXANDRIA_API_KEY
     appIdentifier = APP_IDENTIFIER
 
     axiosInstance = axios.create({
-        baseURL: ALEXANDRIA_HOST + '/stats/',
+        baseURL: ALEXANDRIA_HOST + '/stats',
         timeout: 500,
         headers: {
             'x-access-token': ALEXANDRIA_API_KEY,
@@ -24,18 +25,7 @@ module.exports = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIFIER) 
         }
     });
 
-    this.logCounter = function (tag, value) {
-        sendTag(tag, value)
-    }
-
-    this.logEvent = function (tag, value) {
-        sendEvent(tag, value)
-    }
-
-    this.logUniqueEvent = function(tag, uniqueIdentifier, value) {
-        sendUniqueEvent(tag, uniqueIdentifier, value)
-    }
-    return this
+    return module.exports
 }
 
 // Exposed functionality
@@ -45,7 +35,7 @@ module.exports = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIFIER) 
  * @param {string} tagToSend 
  * @param {string} valueToSend 
  */
-function sendTag(tagToSend, valueToSend) {
+module.exports.sendTag = function sendTag(tagToSend, valueToSend) {
     if (tagToSend && valueToSend && appIdentifier) {
         try {
             axiosInstance.post('/count', {
@@ -66,7 +56,7 @@ function sendTag(tagToSend, valueToSend) {
  * @param {string} tagToSend 
  * @param {string} valueToSend 
  */
-function sendEvent(tagToSend, valueToSend) {
+module.exports.sendEvent = function sendEvent(tagToSend, valueToSend) {
     if (tagToSend && valueToSend && appIdentifier) {
         try {
             axiosInstance.post('/event', {
@@ -88,7 +78,7 @@ function sendEvent(tagToSend, valueToSend) {
  * @param {string} uniqueIdentifierToSend 
  * @param {string} valueToSend 
  */
-function sendUniqueEvent(tagToSend, uniqueIdentifierToSend, valueToSend) {
+module.exports.sendUniqueEvent = function sendUniqueEvent(tagToSend, uniqueIdentifierToSend, valueToSend) {
     if (tagToSend && uniqueIdentifierToSend && valueToSend && appIdentifier) {
         try {
             axiosInstance.post('/uniqueEvent', {

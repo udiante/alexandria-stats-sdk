@@ -12,19 +12,22 @@ Required:
 Example:
 
 ````javascript 
-var StatsManager = new this.AlexandriaStatsManager('http://localhost:7000/api','API_KEY_VERY_SECURE','UNIQUE_APPLICATION_IDENTIFIER')
+var StatsManager = AlexandriaStatsManager.init('http://localhost:7000/api','API_KEY_VERY_SECURE','UNIQUE_APPLICATION_IDENTIFIER')
 
 // Increases the event "PRUEBA_ENVIO" under the TAG "PRUEBA SDK"
-StatsManager.logCounter("PRUEBA_SDK", "PRUEBA_ENVIO")
+StatsManager.sendTag("PRUEBA_SDK", "PRUEBA_ENVIO")
 
 // Increases the event "{evento:"NUEVO_EVENTO", id:1234}" under the TAG "PRUEBA SDK"
-StatsManager.logEvent("PRUEBA_SDK", {evento:"NUEVO_EVENTO", id:1234})
+StatsManager.sendEvent("PRUEBA_SDK", {evento:"NUEVO_EVENTO", id:1234})
 
 // Updates the event "USER_LOGGED" with the data "{evento:"NUEVO_EVENTO", id:1234}" under the TAG "PRUEBA SDK"
-StatsManager.logUniqueEvent("PRUEBA_SDK", "USER_LOGGED", {location:"123456", id:1234})
+StatsManager.sendUniqueEvent("PRUEBA_SDK", "USER_LOGGED", {location:"123456", id:1234})
 ````
 
 NPM Import:
 ````javascript 
-"alexandria-stats-sdk": "git://github.com:udiante/alexandria-stats-sdk#semver:^1.0.0"
+"alexandria-stats-sdk": "git://github.com:udiante/alexandria-stats-sdk#semver:^1.1.0"
 ````
+
+## ENV VARIABLES
+ENABLE_DEBUG_LOGS: ["true"] prints console error logs
