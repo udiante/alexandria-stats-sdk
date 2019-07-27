@@ -1,6 +1,6 @@
 {
   "name": "alexandria-stats-sdk",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "SDK Para el control de estadísticas",
   "main": "index.js",
   "private": true,
