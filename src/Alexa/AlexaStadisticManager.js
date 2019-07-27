@@ -28,7 +28,7 @@ module.exports.logStartIntent = function (intentHandler) {
         if (userIdentifier) {
             AlexandriaStatsManager.sendTag(ALEX_EVENTS.USERS_RETENTION, userIdentifier)
             AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, {
-                APL: getAPLDevice(intentHandler),
+                APL: intentHandler.intentData.suportsAPL || getAPLDevice(intentHandler),
                 LOCALE: getLocale(intentHandler)
             })
         }
