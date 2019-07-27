@@ -2,25 +2,25 @@ const axios = require('axios')
 
 var axiosInstance
 
-var host
-var apiKey
-var appIdentifier
+var ALEXANDRIA_ENDPOINT
+var ALEXANDRIA_API_KEY
+var APP_IDENTIFIER
 
 
-module.exports.init = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIFIER) {
-    host = ALEXANDRIA_HOST
-    apiKey = ALEXANDRIA_API_KEY
-    appIdentifier = APP_IDENTIFIER
+module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier) {
+    ALEXANDRIA_ENDPOINT = alexandriaHost + '/stats'
+    ALEXANDRIA_API_KEY = alexandriaAPIkey
+    APP_IDENTIFIER = appIdentifier
 
     axiosInstance = axios.create({
-        baseURL: ALEXANDRIA_HOST + '/stats',
+        baseURL: ALEXANDRIA_ENDPOINT,
         timeout: 500,
         headers: {
-            'x-access-token': ALEXANDRIA_API_KEY,
+            'x-access-token': alexandriaAPIkey,
             'x-no-response': true
         },
         params: {
-            apiKey: ALEXANDRIA_API_KEY,
+            apiKey: alexandriaAPIkey,
             application: APP_IDENTIFIER
         }
     });
@@ -36,10 +36,10 @@ module.exports.init = function (ALEXANDRIA_HOST, ALEXANDRIA_API_KEY, APP_IDENTIF
  * @param {string} valueToSend 
  */
 module.exports.sendTag = function sendTag(tagToSend, valueToSend) {
-    if (tagToSend && valueToSend && appIdentifier) {
+    if (tagToSend && valueToSend && APP_IDENTIFIER) {
         try {
             axiosInstance.post('/count', {
-                application: appIdentifier,
+                application: APP_IDENTIFIER,
                 tag: tagToSend,
                 value: valueToSend
             })
@@ -57,10 +57,10 @@ module.exports.sendTag = function sendTag(tagToSend, valueToSend) {
  * @param {string} valueToSend 
  */
 module.exports.sendEvent = function sendEvent(tagToSend, valueToSend) {
-    if (tagToSend && valueToSend && appIdentifier) {
+    if (tagToSend && valueToSend && APP_IDENTIFIER) {
         try {
             axiosInstance.post('/event', {
-                application: appIdentifier,
+                application: APP_IDENTIFIER,
                 tag: tagToSend,
                 value: valueToSend
             })
@@ -79,10 +79,10 @@ module.exports.sendEvent = function sendEvent(tagToSend, valueToSend) {
  * @param {string} valueToSend 
  */
 module.exports.sendUniqueEvent = function sendUniqueEvent(tagToSend, uniqueIdentifierToSend, valueToSend) {
-    if (tagToSend && uniqueIdentifierToSend && valueToSend && appIdentifier) {
+    if (tagToSend && uniqueIdentifierToSend && valueToSend && APP_IDENTIFIER) {
         try {
             axiosInstance.post('/uniqueEvent', {
-                application: appIdentifier,
+                application: APP_IDENTIFIER,
                 tag: tagToSend,
                 uniqueIdentifier: uniqueIdentifierToSend,
                 value: valueToSend
