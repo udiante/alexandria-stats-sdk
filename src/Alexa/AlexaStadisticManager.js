@@ -41,8 +41,8 @@ module.exports.logStartIntent = function (intentHandler) {
 
 module.exports.logIntentProperties = function (intentHandler) {
     try {
-        AlexandriaStatsManager.sendEvent(ALEX_EVENTS.APL_SUPPORT, getAPLDevice(intentHandler))
-        AlexandriaStatsManager.sendEvent(ALEX_EVENTS.LOCALES, getLocale(intentHandler))
+        AlexandriaStatsManager.sendTag(ALEX_EVENTS.APL_SUPPORT, getAPLDevice(intentHandler))
+        AlexandriaStatsManager.sendTag(ALEX_EVENTS.LOCALES, getLocale(intentHandler))
     } catch (error) {
         if (ENABLE_LOGS) {
             console.log(error)
@@ -51,7 +51,7 @@ module.exports.logIntentProperties = function (intentHandler) {
 }
 
 module.exports.logValue = function (tag, event) {
-    AlexandriaStatsManager.sendEvent(tag || ALEX_EVENTS.CUSTOM_DATA, event)
+    AlexandriaStatsManager.sendTag(tag || ALEX_EVENTS.CUSTOM_DATA, event)
 }
 
 /** 
