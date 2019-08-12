@@ -8,7 +8,7 @@ const ALEXA_CONSTANT_EVENTS = {
 }
 
 const ALEX_EVENTS = {
-    USER_START_INTENT: "USER_START_INTENT",
+    USER_START_INTENT: 'USER_START_INTENT',
     INTENT_DEVICE_DATA: 'INTENT_DEVICE_DATA',
     USERS_RETENTION: 'USERS_RETENTION',
     CUSTOM_DATA: 'CUSTOM_DATA',
@@ -74,7 +74,7 @@ function obfuscateData(string) {
 function getAPLDevice(intentHandler) {
     try {
         if (hasAPL(intentHandler)) {
-            return ALEXA_CONSTANT_EVENTS.HAS_UNKNOWN_APL_SUPORT
+            return getAPLDeviceIdentifier(intentHandler)
         }
         return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
     } catch (error) {
@@ -83,7 +83,36 @@ function getAPLDevice(intentHandler) {
 }
 
 function hasAPL(intentHandler) {
-    return (intentHandler.intentData.suportsAPL || intentHandler.intentData.APL || intentHandler.intentData.supportsAPL)
+    var posibleData = intentHandler.intentData.supportsAPL || intentHandler.intentData.suportsAPL || intentHandler.intentData.APL
+    if (posibleData == undefined || !posibleData) {
+        return false
+    }
+    return true
+}
+
+function getAPLDeviceIdentifier(intentHandler) {
+    try {
+        const hwdData = getAPLViewPortHardwareSpecs(intentHandler)
+        if (hwdData) {
+            return 'shape:'+hwdData.shape+'|w:'+hwdData.pixelWidth+'px|h:'+hwdData.pixelHeight+'px|dpi:'+hwdData.dpi
+        }
+    } catch (error) {
+        return ALEXA_CONSTANT_EVENTS.HAS_UNKNOWN_APL_SUPORT
+    }
+}
+
+function getAPLViewPortHardwareSpecs(intentHandler) {
+    try {
+        const viewPort = intentHandler.requestEnvelope.context.Viewport
+        return {
+            shape: viewPort['shape'],
+            pixelWidth: viewPort['pixelWidth'],
+            pixelHeight: viewPort['pixelHeight'],
+            dpi: viewPort['dpi']
+        }
+    } catch (error) {
+        
+    }
 }
 
 function getLocale(intentHandler) {
@@ -99,11 +128,11 @@ function getLocale(intentHandler) {
 
 function prepareUserStartData(intentHandler) {
     var userData = {
-        hasAPL: false,
-        LOCALE: getLocale(intentHandler)
+        LOCALE: getLocale(intentHandler),
+        hasAPL: false
     }
     try {
-        userData.hasAPL = hasAPL(intentHandler)
+        userData.hasAPL = hasAPL(intentHandler) || false
         if (userData.hasAPL) {
             userData['APL_DEVICE'] = getAPLDevice(intentHandler)
         }
