@@ -83,7 +83,7 @@ function getAPLDevice(intentHandler) {
 }
 
 function hasAPL(intentHandler) {
-    return (intentHandler.intentData.suportsAPL || intentHandler.intentData.APL || intentHandler.intentData.supportsAPL)
+    return (intentHandler.intentData.supportsAPL || intentHandler.intentData.suportsAPL || intentHandler.intentData.APL) || false
 }
 
 function getLocale(intentHandler) {
@@ -103,7 +103,7 @@ function prepareUserStartData(intentHandler) {
         LOCALE: getLocale(intentHandler)
     }
     try {
-        userData.hasAPL = hasAPL(intentHandler)
+        userData.hasAPL = hasAPL(intentHandler) || false
         if (userData.hasAPL) {
             userData['APL_DEVICE'] = getAPLDevice(intentHandler)
         }
