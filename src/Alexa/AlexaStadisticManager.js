@@ -27,10 +27,7 @@ module.exports.logStartIntent = function (intentHandler) {
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
             AlexandriaStatsManager.sendTag(ALEX_EVENTS.USERS_RETENTION, userIdentifier)
-            AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, {
-                APL: intentHandler.intentData.suportsAPL || getAPLDevice(intentHandler),
-                LOCALE: getLocale(intentHandler)
-            })
+            AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, prepareUserStartData(intentHandler))
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -76,13 +73,17 @@ function obfuscateData(string) {
 
 function getAPLDevice(intentHandler) {
     try {
-        if (intentHandler.intentData.suportsAPL || intentHandler.intentData.APL || intentHandler.intentData.supportsAPL) {
+        if (hasAPL(intentHandler)) {
             return ALEXA_CONSTANT_EVENTS.HAS_UNKNOWN_APL_SUPORT
         }
         return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
     } catch (error) {
         return ALEXA_CONSTANT_EVENTS.NO_APL_SUPORT
     }
+}
+
+function hasAPL(intentHandler) {
+    return (intentHandler.intentData.suportsAPL || intentHandler.intentData.APL || intentHandler.intentData.supportsAPL)
 }
 
 function getLocale(intentHandler) {
@@ -94,4 +95,20 @@ function getLocale(intentHandler) {
     } catch (error) {
         return ALEXA_CONSTANT_EVENTS.NO_LOCALE
     }
+}
+
+function prepareUserStartData(intentHandler) {
+    var userData = {
+        hasAPL: false,
+        LOCALE: getLocale(intentHandler)
+    }
+    try {
+        userData.hasAPL = hasAPL(intentHandler)
+        if (userData.hasAPL) {
+            userData['APL_DEVICE'] = getAPLDevice(intentHandler)
+        }
+    } catch (error) {
+        
+    }
+    return userData
 }
