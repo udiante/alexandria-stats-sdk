@@ -14,7 +14,7 @@ module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier)
 
     axiosInstance = axios.create({
         baseURL: ALEXANDRIA_ENDPOINT,
-        timeout: 500,
+        timeout: 1000,
         headers: {
             'x-access-token': alexandriaAPIkey,
             'x-no-response': true
@@ -95,5 +95,30 @@ module.exports.sendUniqueEvent = function sendUniqueEvent(tagToSend, uniqueIdent
     }
 }
 
+module.exports.getUniqueEvents = async function(tag, uniqueIdentifier) {
+    var response
+    try {
+        var uniqueEvents = await axiosInstance.get('/uniqueEvent', {
+            application: APP_IDENTIFIER
+        })
+        if (uniqueEvents && uniqueEvents.data) {
+            uniqueEvents = uniqueEvents.data
+            if (tag) {
+                response = uniqueEvents[tag]
+                if (uniqueIdentifier && response) {
+                    response = response[uniqueIdentifier]
+                }
+            }
+            else {
+                response = uniqueEvents
+            }
+        }
+    } catch (error) {
+        if (process.env.ENABLE_DEBUG_LOGS) {
+            console.error(error)
+        }
+    }
+    return response
+}
 
 // Private functionality

@@ -22,6 +22,11 @@ StatsManager.sendEvent("PRUEBA_SDK", {evento:"NUEVO_EVENTO", id:1234})
 
 // Updates the event "USER_LOGGED" with the data "{evento:"NUEVO_EVENTO", id:1234}" under the TAG "PRUEBA SDK"
 StatsManager.sendUniqueEvent("PRUEBA_SDK", "USER_LOGGED", {location:"123456", id:1234})
+
+// Retrieves all the unique events, if provided you can filter based on the name (ie: "USER_LOGGED" with the data under the TAG "PRUEBA SDK")
+async StatsManager.getUniqueEvents('PRUEBA_SDK', 'USER_LOGGED')
+async StatsManager.getUniqueEvents('PRUEBA_SDK', 'USER_LOGGED')
+
 ````
 
 NPM Import:
