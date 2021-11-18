@@ -1,6 +1,6 @@
 {
   "name": "alexandria-stats-sdk",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "SDK Para el control de estadísticas",
   "main": "index.js",
   "private": true,
@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/udiante/alexandria-stats-sdk#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.24.0"
   }
 }
