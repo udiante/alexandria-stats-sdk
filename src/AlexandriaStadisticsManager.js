@@ -8,7 +8,7 @@ var ALEXANDRIA_ENDPOINT
 var ALEXANDRIA_API_KEY
 var APP_IDENTIFIER
 
-module.exports.DEFAULT_POST_TIMEOUT = 1
+module.exports.DEFAULT_POST_TIMEOUT = 100
 module.exports.DEFAULT_GET_TIMEOUT = 0 // 0 is no timeout
 
 
