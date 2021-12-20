@@ -84,7 +84,7 @@ module.exports.logUserIntent = function(intentHandler) {
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
             var eventData =  prepareUserStartData(intentHandler)
-            eventData.INTENT = intentHandler.intentData.intentName
+            eventData.INTENT_NAME = intentHandler.intentData.intentName
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
