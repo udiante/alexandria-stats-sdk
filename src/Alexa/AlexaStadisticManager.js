@@ -21,6 +21,8 @@ const ALEX_EVENTS = {
     LOCALES: 'INTENT_LOCALES'
 }
 
+module.exports.ALEXA_SKILL_IDENTIFIER
+
 module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier, mixPanelToken) {
     AlexandriaStatsManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier)
     if (mixPanelToken) {
@@ -33,15 +35,15 @@ module.exports.logStartIntent = function (intentHandler) {
     try {
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
-            const eventData =  prepareUserStartData(intentHandler)
+            var eventData =  prepareUserStartData(intentHandler)
             AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
 
             MixpanelService.configureUserData(userIdentifier, {
                 "lastLocale":  eventData.LOCALE,
                 "lastAPL_DEVICE": eventData.APL_DEVICE,
-                "hasAPL": eventData.hasAPL
+                "hasAPL": eventData.hasAPL,
+                "lastSkill": module.exports.ALEXA_SKILL_IDENTIFIER
             })
-
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
@@ -199,6 +201,9 @@ function prepareUserStartData(intentHandler) {
         userData.hasAPL = hasAPL(intentHandler) || false
         if (userData.hasAPL) {
             userData['APL_DEVICE'] = getAPLDevice(intentHandler)
+        }
+        if (module.exports.ALEXA_SKILL_IDENTIFIER) {
+            userData.SKILL = module.exports.ALEXA_SKILL_IDENTIFIER
         }
     } catch (error) {
         
