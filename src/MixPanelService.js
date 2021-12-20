@@ -21,7 +21,9 @@ module.exports.trackUserEvent = function (eventName, userDistintc, payload) {
     if (!mixPanel) {
         return
     }
-    mixPanel.track(eventName, {distinct_id: userDistintc, payload})
+    var eventData = payload || {}
+    eventData.distinct_id = userDistinct
+    mixPanel.track(eventName, eventData)
 }
 
 module.exports.configureUserData = function (userDistinct, userData) {

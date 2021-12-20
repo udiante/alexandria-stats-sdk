@@ -10,6 +10,9 @@ const ALEXA_CONSTANT_EVENTS = {
 
 const ALEX_EVENTS = {
     USER_START_INTENT: 'USER_START_INTENT',
+    USER_END_INTENT: 'USER_END_INTENT',
+    USER_ERROR_INTENT: 'USER_ERROR_INTENT',
+    USER_INTENT: 'USER_INTENT',
     INTENT_DEVICE_DATA: 'INTENT_DEVICE_DATA',
     USERS_RETENTION: 'USERS_RETENTION',
     CUSTOM_DATA: 'CUSTOM_DATA',
@@ -40,6 +43,49 @@ module.exports.logStartIntent = function (intentHandler) {
             })
 
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
+        }
+    } catch (error) {
+        if (ENABLE_LOGS) {
+            console.log(error)
+        }
+    }
+}
+
+module.exports.logUserEndIntent = function(intentHandler) {
+    try {
+        const userIdentifier = getUserIdentifier(intentHandler)
+        if (userIdentifier) {
+            const eventData =  prepareUserStartData(intentHandler)
+            MixpanelService.trackUserEvent(ALEX_EVENTS.USER_END_INTENT, userIdentifier, eventData)
+        }
+    } catch (error) {
+        if (ENABLE_LOGS) {
+            console.log(error)
+        }
+    }
+}
+
+module.exports.logUserError = function(intentHandler, error) {
+    try {
+        const userIdentifier = getUserIdentifier(intentHandler)
+        if (userIdentifier) {
+            var eventData =  prepareUserStartData(intentHandler)
+            MixpanelService.trackUserEvent(ALEX_EVENTS.USER_ERROR_INTENT, userIdentifier, eventData)
+        }
+    } catch (error) {
+        if (ENABLE_LOGS) {
+            console.log(error)
+        }
+    }
+}
+
+module.exports.logUserIntent = function(intentHandler) {
+    try {
+        const userIdentifier = getUserIdentifier(intentHandler)
+        if (userIdentifier) {
+            var eventData =  prepareUserStartData(intentHandler)
+            eventData.INTENT = intentHandler.intentData.intentName
+            MixpanelService.trackUserEvent(ALEX_EVENTS.USER_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
