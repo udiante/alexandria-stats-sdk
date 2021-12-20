@@ -1,4 +1,5 @@
 const AlexandriaStatsManager = require('./../AlexandriaStadisticsManager')
+const MixpanelService = require('./../MixPanelService')
 const ENABLE_LOGS = (process.env.ENABLE_DEBUG_LOGS == 'true')
 
 const ALEXA_CONSTANT_EVENTS = {
@@ -17,8 +18,11 @@ const ALEX_EVENTS = {
     LOCALES: 'INTENT_LOCALES'
 }
 
-module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier) {
+module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier, mixPanelToken) {
     AlexandriaStatsManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier)
+    if (mixPanelToken) {
+        MixpanelService.init(mixPanelToken)
+    }
 }
 
 module.exports.logStartIntent = function (intentHandler) {
@@ -26,8 +30,16 @@ module.exports.logStartIntent = function (intentHandler) {
     try {
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
-            // AlexandriaStatsManager.sendTag(ALEX_EVENTS.USERS_RETENTION, userIdentifier)
-            AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, prepareUserStartData(intentHandler))
+            const eventData =  prepareUserStartData(intentHandler)
+            AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
+
+            MixpanelService.configureUserData(userIdentifier, {
+                "lastLocale":  eventData.LOCALE,
+                "lastAPL_DEVICE": eventData.APL_DEVICE,
+                "hasAPL": eventData.hasAPL
+            })
+
+            MixpanelService.trackEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -38,8 +50,13 @@ module.exports.logStartIntent = function (intentHandler) {
 
 module.exports.logIntentProperties = function (intentHandler) {
     try {
-        AlexandriaStatsManager.sendTag(ALEX_EVENTS.APL_SUPPORT, getAPLDevice(intentHandler))
-        AlexandriaStatsManager.sendTag(ALEX_EVENTS.LOCALES, getLocale(intentHandler))
+        const locale = getLocale(intentHandler)
+        const aplDevice = getAPLDevice(intentHandler)
+        AlexandriaStatsManager.sendTag(ALEX_EVENTS.APL_SUPPORT, locale)
+        AlexandriaStatsManager.sendTag(ALEX_EVENTS.LOCALES, aplDevice)
+
+        // const userIdentifier = getUserIdentifier(intentHandler)
+
     } catch (error) {
         if (ENABLE_LOGS) {
             console.log(error)
