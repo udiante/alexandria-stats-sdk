@@ -39,7 +39,7 @@ module.exports.logStartIntent = function (intentHandler) {
                 "hasAPL": eventData.hasAPL
             })
 
-            MixpanelService.trackEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
+            MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -73,6 +73,7 @@ module.exports.logValue = function (tag, event) {
  */
 module.exports.logIntentUsage = function (intentIdentifier) {
     AlexandriaStatsManager.sendTag(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
+    MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, {intentName: intentIdentifier})
 }
 
 function getUserIdentifier(intentHandler) {

@@ -1,25 +1,32 @@
 var MixPanel = require('mixpanel')
-
-var isInitialized = false
+var mixPanel
 
 module.exports.init = function (MIXPANEL_TOKEN) {
     if(!MIXPANEL_TOKEN) {
         return
     }
-    MixPanel = require('mixpanel')
-    MixPanel.init(MIXPANEL_TOKEN, {
+    mixPanel = MixPanel.init(MIXPANEL_TOKEN, {
         host: "api-eu.mixpanel.com",
     })
-    isInitialized = true
 }
 
-module.exports.trackEvent = function (eventName, userDistintc, payload) {
-    if (!isInitialized) {
+module.exports.trackEvent = function(eventName, payload) {
+    if (!mixPanel) {
         return
     }
-    MixPanel.track(eventName, {distinct_id: userDistintc, payload})
+    mixPanel.track(eventName, payload)
+}
+
+module.exports.trackUserEvent = function (eventName, userDistintc, payload) {
+    if (!mixPanel) {
+        return
+    }
+    mixPanel.track(eventName, {distinct_id: userDistintc, payload})
 }
 
 module.exports.configureUserData = function (userDistinct, userData) {
-    MixPanel.people.set(userDistinct, userData)
+    if (!mixPanel) {
+        return
+    }
+    mixPanel.people.set(userDistinct, userData)
 }
