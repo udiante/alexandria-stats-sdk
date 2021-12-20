@@ -122,11 +122,12 @@ module.exports.logValue = function (tag, event) {
 }
 
 /** 
- * Logs an intent
+ * Logs an intent.
+ * DEPRECATED: use logUserIntent to track the user usage tracking with Mixpanel
  */
 module.exports.logIntentUsage = function (intentIdentifier) {
     AlexandriaStatsManager.sendTag(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
-    MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, {intentName: intentIdentifier})
+    // MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, {intentName: intentIdentifier, SKILL: module.exports.ALEXA_SKILL_IDENTIFIER})
 }
 
 function getUserIdentifier(intentHandler) {

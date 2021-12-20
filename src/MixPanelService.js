@@ -31,4 +31,5 @@ module.exports.configureUserData = function (userDistinct, userData) {
         return
     }
     mixPanel.people.set(userDistinct, userData)
+    mixPanel.people.increment(userDistinct, "recurrence")
 }
