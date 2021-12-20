@@ -15,6 +15,11 @@ Added Mixpanel SDK to Alexa Tracking (Beta)
 AlexaStadisticManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier, mixPanelToken)
 ````
 
+- For a shared tracking Mixpanel project you can provide a Skill identifier
+````javascript
+AlexaStatsManager.ALEXA_SKILL_IDENTIFIER = 'SKILL_TEST'
+````
+
 # Usage
 
 Required:

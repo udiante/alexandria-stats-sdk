@@ -72,6 +72,11 @@ module.exports.logUserError = function(intentHandler, error) {
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
             var eventData =  prepareUserStartData(intentHandler)
+            try {
+                eventData.error = JSON.stringify(error)
+            } catch (error) {
+                
+            }
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_ERROR_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
