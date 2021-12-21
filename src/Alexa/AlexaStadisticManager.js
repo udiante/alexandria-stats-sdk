@@ -39,10 +39,16 @@ module.exports.logStartIntent = function (intentHandler) {
             AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
 
             MixpanelService.configureUserData(userIdentifier, {
-                "lastLocale":  eventData.LOCALE,
+                "country": getUserLocation(eventData.LOCALE),
+                "locale":  eventData.LOCALE,
                 "lastAPL_DEVICE": eventData.APL_DEVICE,
                 "hasAPL": eventData.hasAPL,
                 "lastSkill": module.exports.ALEXA_SKILL_IDENTIFIER
+            })
+            MixpanelService.unionUserProperty(userIdentifier, {
+                "APL_DEVICES": eventData.APL_DEVICE,
+                "SKILLS": module.exports.ALEXA_SKILL_IDENTIFIER,
+                "LOCALES": eventData.LOCALE
             })
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
         }
@@ -50,6 +56,14 @@ module.exports.logStartIntent = function (intentHandler) {
         if (ENABLE_LOGS) {
             console.log(error)
         }
+    }
+}
+
+function getUserLocation(locale) {
+    try {
+        return locale.split('-')[1]
+    } catch (error) {
+        
     }
 }
 
@@ -122,12 +136,11 @@ module.exports.logValue = function (tag, event) {
 }
 
 /** 
- * Logs an intent.
- * DEPRECATED: use logUserIntent to track the user usage tracking with Mixpanel
+ * Logs an intent
  */
 module.exports.logIntentUsage = function (intentIdentifier) {
     AlexandriaStatsManager.sendTag(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
-    // MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, {intentName: intentIdentifier, SKILL: module.exports.ALEXA_SKILL_IDENTIFIER})
+    MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, {intentName: intentIdentifier})
 }
 
 function getUserIdentifier(intentHandler) {

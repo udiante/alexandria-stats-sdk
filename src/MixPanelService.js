@@ -31,5 +31,18 @@ module.exports.configureUserData = function (userDistinct, userData) {
         return
     }
     mixPanel.people.set(userDistinct, userData)
-    mixPanel.people.increment(userDistinct, "recurrence")
 }
+
+/**
+ * Adds the properties defined witouth ignoring duplicates
+ * @param {*} userDistinct User identifier
+ * @param {*} userData An object with key: {values} o key: [Array]
+ * @returns 
+ */
+module.exports.unionUserProperty = function (userDistinct, userData){
+    if (!mixPanel) {
+        return
+    }
+    mixPanel.people.union(userDistinct, userData)
+}
+
