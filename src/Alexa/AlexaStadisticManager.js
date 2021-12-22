@@ -119,8 +119,8 @@ module.exports.logIntentProperties = function (intentHandler) {
     try {
         const locale = getLocale(intentHandler)
         const aplDevice = getAPLDevice(intentHandler)
-        AlexandriaStatsManager.sendTag(ALEX_EVENTS.APL_SUPPORT, locale)
-        AlexandriaStatsManager.sendTag(ALEX_EVENTS.LOCALES, aplDevice)
+        AlexandriaStatsManager.sendTag(ALEX_EVENTS.APL_SUPPORT, aplDevice)
+        AlexandriaStatsManager.sendTag(ALEX_EVENTS.LOCALES, locale)
 
         // const userIdentifier = getUserIdentifier(intentHandler)
 
