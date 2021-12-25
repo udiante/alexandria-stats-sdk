@@ -50,6 +50,7 @@ async StatsManager.getUniqueEvents('PRUEBA_SDK', 'USER_LOGGED')
 NPM Import:
 ````javascript 
 "alexandria-stats-sdk": "git://github.com:udiante/alexandria-stats-sdk#semver:^1.1.0"
+"alexandria-stats-sdk": "file:./../alexandria-stats-sdk",
 ````
 
 ## ENV VARIABLES
