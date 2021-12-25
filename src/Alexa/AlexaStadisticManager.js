@@ -50,6 +50,7 @@ module.exports.logStartIntent = function (intentHandler) {
                 "SKILLS": module.exports.ALEXA_SKILL_IDENTIFIER,
                 "LOCALES": eventData.LOCALE
             })
+            MixpanelService.incrementUserProperty(userIdentifier, 'recurrence')
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
         }
     } catch (error) {
