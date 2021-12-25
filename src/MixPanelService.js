@@ -56,5 +56,5 @@ module.exports.incrementUserProperty = function (userDistinct, property, amount)
     if (!mixPanel) {
         return
     }
-    mixpanel.people.increment(userDistinct, property, amount);
+    mixPanel.people.increment(userDistinct, property, amount);
 }
