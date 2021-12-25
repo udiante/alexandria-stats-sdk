@@ -46,3 +46,15 @@ module.exports.unionUserProperty = function (userDistinct, userData){
     mixPanel.people.union(userDistinct, userData)
 }
 
+/**
+ * Increases a property for a user
+ * @param {String} userDistinct User identifier
+ * @param {String} property property name
+ * @param {Number} amount *optional* The amount to increase (if not provided is 1)
+ */
+module.exports.incrementUserProperty = function (userDistinct, property, amount) {
+    if (!mixPanel) {
+        return
+    }
+    mixpanel.people.increment(userDistinct, property, amount);
+}
