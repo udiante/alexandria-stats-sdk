@@ -2,6 +2,24 @@
 
 Package NPM para el uso de la funcionalidad de estadísticas de la API Alexandria.
 
+# Versions
+
+## 1.5.0 
+
+Added Mixpanel SDK to Alexa Tracking (Beta)
+
+- Added automatic Alexa event tracking providing the Mixpanel API KEY. 
+*Optional* if provided the events will be sended to MixPanel
+
+````javascript
+AlexaStadisticManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier, mixPanelToken)
+````
+
+- For a shared tracking Mixpanel project you can provide a Skill identifier
+````javascript
+AlexaStatsManager.ALEXA_SKILL_IDENTIFIER = 'SKILL_TEST'
+````
+
 # Usage
 
 Required:
@@ -32,6 +50,7 @@ async StatsManager.getUniqueEvents('PRUEBA_SDK', 'USER_LOGGED')
 NPM Import:
 ````javascript 
 "alexandria-stats-sdk": "git://github.com:udiante/alexandria-stats-sdk#semver:^1.1.0"
+"alexandria-stats-sdk": "file:./../alexandria-stats-sdk",
 ````
 
 ## ENV VARIABLES
