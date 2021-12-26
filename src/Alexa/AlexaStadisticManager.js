@@ -149,6 +149,17 @@ module.exports.logUserCustomEvent = function(intentHandler, eventName, eventData
     }
 }
 
+module.exports.logCustomEvent = function(profileDistinctId, eventName, eventData) {
+    if (!IS_MIXPANEL_CONFIGURED) return
+    try {
+        MixpanelService.trackUserEvent(eventName, profileDistinctId, eventData)
+    } catch (error) {
+        if (ENABLE_LOGS) {
+            console.log(error)
+        }
+    }
+}
+
 // MARK: Alexandria Events
 
 module.exports.logIntentProperties = function (intentHandler) {
