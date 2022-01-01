@@ -18,7 +18,8 @@ const ALEX_EVENTS = {
     CUSTOM_DATA: 'CUSTOM_DATA',
     INTENT_USAGE: 'INTENT_USAGE',
     APL_SUPPORT: 'INTENT_APL_SUPPORT',
-    LOCALES: 'INTENT_LOCALES'
+    LOCALES: 'INTENT_LOCALES',
+    ALEXA_RESPONSE: 'ALEXA_RESPONSE'
 }
 
 module.exports.ALEXA_SKILL_IDENTIFIER
@@ -133,6 +134,14 @@ module.exports.logUserIntent = function (intentHandler) {
     }
 }
 
+function prepareIntentSlots(intentHandler) {
+    try {
+        return intentHandler.requestEnvelope.request.intent.slots
+    } catch (error) {
+        
+    }
+}
+
 module.exports.logUserCustomEvent = function(intentHandler, eventName, eventData) {
     if (!IS_MIXPANEL_CONFIGURED) return
     try {
@@ -184,10 +193,11 @@ module.exports.logValue = function (tag, event) {
 
 /** 
  * Logs an intent
+ * @deprecated DO NOT USE
  */
 module.exports.logIntentUsage = function (intentIdentifier) {
     AlexandriaStatsManager.sendTag(ALEX_EVENTS.INTENT_USAGE, intentIdentifier)
-    MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, { intentName: intentIdentifier })
+    MixpanelService.trackEvent(ALEX_EVENTS.INTENT_USAGE, { INTENT_NAME: intentIdentifier })
 }
 
 // MARK: Private functions
@@ -276,13 +286,20 @@ function getLocale(intentHandler) {
 }
 
 function prepareUserStartData(intentHandler) {
-    var userData = {
-        LOCALE: getLocale(intentHandler),
-        hasAPL: false
+    var userData = intentHandler.trackingData || {} // initialize the object with the specific tracking data provided in the intentHandler
+
+    userData.LOCALE = getLocale(intentHandler)
+    userData.hasAPL = false
+
+    if (intentHandler.trackingData) {
+        // Add calculated properties
+        userData.SLOTS = prepareIntentSlots(intentHandler)
     }
+
     if (module.exports.ALEXA_SKILL_IDENTIFIER) {
         userData.SKILL = module.exports.ALEXA_SKILL_IDENTIFIER
     }
+    
     try {
         userData.hasAPL = hasAPL(intentHandler) || false
         if (userData.hasAPL) {
@@ -293,10 +310,6 @@ function prepareUserStartData(intentHandler) {
             console.log(error)
         }
     }
-    const extraTrackingData = intentHandler.trackingData
-    if (extraTrackingData) {
-        userData.hasReprompt =  extraTrackingData.hasReprompt
-        userData.shouldEndSession =  extraTrackingData.shouldEndSession
-    }
+
     return userData
 }
