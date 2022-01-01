@@ -4,6 +4,10 @@ Package NPM para el uso de la funcionalidad de estadísticas de la API Alexandri
 
 # Versions
 
+## 1.5.2
+
+Added intent slots tracking 
+
 ## 1.5.0 
 
 Added Mixpanel SDK to Alexa Tracking (Beta)
