@@ -12,7 +12,7 @@ Added Google Analytics Tracking
 *Optional* if provided the events will be sended to Google Analytics
 
 ````javascript
-AlexaStadisticManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier, mixPanelToken, googleAnalyticsMeasurementId, googleAPISecret)
+AlexaStatisticsManager.initGoogleAnalytics(googleAnalyticsId, secretKey)
 ````
 
 
