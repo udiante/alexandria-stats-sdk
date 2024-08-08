@@ -78,7 +78,7 @@ module.exports.logStartIntent = function (intentHandler) {
     }
 }
 
-function sendToGA(eventName, intentHandler, eventData) {
+async function sendToGA(eventName, intentHandler, eventData) {
     const userIdentifier = getUserIdentifier(intentHandler)
     if (GA.isInitialized() && userIdentifier) {
         var eventData = prepareUserStartData(intentHandler)
@@ -89,6 +89,12 @@ function sendToGA(eventName, intentHandler, eventData) {
         }
         delete eventData.LOCALE;
         delete eventData.hasAPL;
+        delete eventData.SLOTS;
+        delete eventData.speechOut;
+        delete eventData.reprompt;
+        delete eventData.mp_lib;
+        delete eventData.$lib_version;
+        delete eventData.distinct_id;
         GA.sendEvent(eventName, userIdentifier, userData, eventData)
     }
 }
@@ -317,7 +323,7 @@ function prepareUserStartData(intentHandler) {
 
     userData.LOCALE = getLocale(intentHandler)
     userData.hasAPL = false
-
+    userData.session = intentHandler.requestEnvelope.session.sessionId
     if (intentHandler.trackingData) {
         // Add calculated properties
         userData.SLOTS = prepareIntentSlots(intentHandler)

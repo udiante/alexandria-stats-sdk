@@ -4,7 +4,7 @@ Package NPM para el uso de la funcionalidad de estadísticas de la API Alexandri
 
 # Versions
 
-## 1.6.0
+## 1.6.1
 
 Added Google Analytics Tracking
 

@@ -23,7 +23,7 @@ class GoogleAnalyticsService {
 
         // Configura el cliente Axios con el endpoint preconfigurado
         this.httpClient = axios.create({
-            baseURL: `https://analytics.google.com/mp/collect?measurement_id=${measurementId}&api_secret=${apiSecret}`,
+            baseURL: `https://www.google-analytics.com/mp/collect?measurement_id=${measurementId}&api_secret=${apiSecret}`,
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -44,6 +44,7 @@ class GoogleAnalyticsService {
                 {
                     name: eventName,
                     params: {
+                        engagement_time_msec: 100,
                         ...userProperties,  // Añade las propiedades del usuario al evento
                         ...eventParams     // Añade los parámetros del evento
                     }
@@ -53,7 +54,6 @@ class GoogleAnalyticsService {
 
         try {
             const response = await this.httpClient.post('', payload);
-            console.log('Evento enviado a GA4:', response.data);
         } catch (error) {
             console.error('Error al enviar el evento a GA4:', error.message);
         }
