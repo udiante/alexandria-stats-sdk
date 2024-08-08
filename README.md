@@ -4,6 +4,18 @@ Package NPM para el uso de la funcionalidad de estadísticas de la API Alexandri
 
 # Versions
 
+## 1.6.0
+
+Added Google Analytics Tracking
+
+- Added automatic Alexa event tracking providing the Google Analytics Measurement ID. 
+*Optional* if provided the events will be sended to Google Analytics
+
+````javascript
+AlexaStadisticManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier, mixPanelToken, googleAnalyticsMeasurementId, googleAPISecret)
+````
+
+
 ## 1.5.2
 
 Added intent slots tracking 

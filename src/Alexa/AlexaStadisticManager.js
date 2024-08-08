@@ -30,6 +30,14 @@ module.exports.initMixPanel = function (mixPanelToken) {
     IS_MIXPANEL_CONFIGURED = true
 }
 
+const GA = require('../GoogleAnalyticsService')
+
+module.exports.initGoogleAnalytics = function (measurementId, apiSecret) {
+    if (measurementId && apiSecret) {
+        GA.init(measurementId, apiSecret)
+    }
+}
+
 var IS_ALEXANDRIA_CONFIGURED = false
 module.exports.init = function (alexandriaHost, alexandriaAPIkey, appIdentifier) {
     AlexandriaStatsManager.init(alexandriaHost, alexandriaAPIkey, appIdentifier)
@@ -58,7 +66,7 @@ module.exports.logStartIntent = function (intentHandler) {
                 MixpanelService.incrementUserProperty(userIdentifier, 'recurrence')
                 MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
             }
-
+            sendToGA(ALEX_EVENTS.USER_START_INTENT, intentHandler, eventData)
             if (IS_ALEXANDRIA_CONFIGURED) {
                 AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
             }
@@ -67,6 +75,21 @@ module.exports.logStartIntent = function (intentHandler) {
         if (ENABLE_LOGS) {
             console.log(error)
         }
+    }
+}
+
+function sendToGA(eventName, intentHandler, eventData) {
+    const userIdentifier = getUserIdentifier(intentHandler)
+    if (GA.isInitialized() && userIdentifier) {
+        var eventData = prepareUserStartData(intentHandler)
+        const userData = {
+            locale: eventData.LOCALE,
+            country: getUserLocation(eventData.LOCALE),
+            hasAPL: eventData.hasAPL,
+        }
+        delete eventData.LOCALE;
+        delete eventData.hasAPL;
+        GA.sendEvent(eventName, userIdentifier, userData, eventData)
     }
 }
 
@@ -90,6 +113,7 @@ module.exports.logUserEndIntent = function (intentHandler, intentName) {
             var eventData = prepareUserStartData(intentHandler)
             eventData.INTENT_NAME = intentName
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_END_INTENT, userIdentifier, eventData)
+            sendToGA(ALEX_EVENTS.USER_END_INTENT, intentHandler, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -110,6 +134,7 @@ module.exports.logUserError = function (intentHandler, error) {
 
             }
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_ERROR_INTENT, userIdentifier, eventData)
+            sendToGA(ALEX_EVENTS.USER_ERROR_INTENT, intentHandler, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -126,6 +151,7 @@ module.exports.logUserIntent = function (intentHandler) {
             var eventData = prepareUserStartData(intentHandler)
             eventData.INTENT_NAME = intentHandler.intentData.intentName
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_INTENT, userIdentifier, eventData)
+            sendToGA(ALEX_EVENTS.USER_INTENT, intentHandler, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -138,11 +164,11 @@ function prepareIntentSlots(intentHandler) {
     try {
         return intentHandler.requestEnvelope.request.intent.slots
     } catch (error) {
-        
+
     }
 }
 
-module.exports.logUserCustomEvent = function(intentHandler, eventName, eventData) {
+module.exports.logUserCustomEvent = function (intentHandler, eventName, eventData) {
     if (!IS_MIXPANEL_CONFIGURED) return
     try {
         const userIdentifier = getUserIdentifier(intentHandler)
@@ -150,6 +176,7 @@ module.exports.logUserCustomEvent = function(intentHandler, eventName, eventData
             const baseEventData = prepareUserStartData(intentHandler)
             const eventPayload = Object.assign({}, baseEventData, eventData || {})
             MixpanelService.trackUserEvent(eventName, userIdentifier, eventPayload)
+            sendToGA(eventName, intentHandler, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -158,7 +185,7 @@ module.exports.logUserCustomEvent = function(intentHandler, eventName, eventData
     }
 }
 
-module.exports.logCustomEvent = function(profileDistinctId, eventName, eventData) {
+module.exports.logCustomEvent = function (profileDistinctId, eventName, eventData) {
     if (!IS_MIXPANEL_CONFIGURED) return
     try {
         MixpanelService.trackUserEvent(eventName, profileDistinctId, eventData)
@@ -299,7 +326,7 @@ function prepareUserStartData(intentHandler) {
     if (module.exports.ALEXA_SKILL_IDENTIFIER) {
         userData.SKILL = module.exports.ALEXA_SKILL_IDENTIFIER
     }
-    
+
     try {
         userData.hasAPL = hasAPL(intentHandler) || false
         if (userData.hasAPL) {
