@@ -66,6 +66,7 @@ module.exports.logStartIntent = function (intentHandler) {
                 MixpanelService.incrementUserProperty(userIdentifier, 'recurrence')
                 MixpanelService.trackUserEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
             }
+            eventData.type = "START"
             sendToGA(ALEX_EVENTS.USER_START_INTENT, intentHandler, eventData)
             if (IS_ALEXANDRIA_CONFIGURED) {
                 AlexandriaStatsManager.sendUniqueEvent(ALEX_EVENTS.USER_START_INTENT, userIdentifier, eventData)
@@ -118,6 +119,7 @@ module.exports.logUserEndIntent = function (intentHandler, intentName) {
         if (userIdentifier) {
             var eventData = prepareUserStartData(intentHandler)
             eventData.INTENT_NAME = intentName
+            eventData.TYPE = 'END'
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_END_INTENT, userIdentifier, eventData)
             sendToGA(ALEX_EVENTS.USER_END_INTENT, intentHandler, eventData)
         }
@@ -140,6 +142,7 @@ module.exports.logUserError = function (intentHandler, error) {
 
             }
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_ERROR_INTENT, userIdentifier, eventData)
+            eventData.TYPE = 'ERROR'
             sendToGA(ALEX_EVENTS.USER_ERROR_INTENT, intentHandler, eventData)
         }
     } catch (error) {
@@ -157,7 +160,8 @@ module.exports.logUserIntent = function (intentHandler) {
             var eventData = prepareUserStartData(intentHandler)
             eventData.INTENT_NAME = intentHandler.intentData.intentName
             MixpanelService.trackUserEvent(ALEX_EVENTS.USER_INTENT, userIdentifier, eventData)
-            sendToGA(ALEX_EVENTS.USER_INTENT, intentHandler, eventData)
+            eventData.TYPE = 'USER_INTENT'
+            sendToGA(eventData.INTENT_NAME, intentHandler, eventData)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
@@ -180,9 +184,10 @@ module.exports.logUserCustomEvent = function (intentHandler, eventName, eventDat
         const userIdentifier = getUserIdentifier(intentHandler)
         if (userIdentifier) {
             const baseEventData = prepareUserStartData(intentHandler)
-            const eventPayload = Object.assign({}, baseEventData, eventData || {})
+            var eventPayload = Object.assign({}, baseEventData, eventData || {})
             MixpanelService.trackUserEvent(eventName, userIdentifier, eventPayload)
-            sendToGA(eventName, intentHandler, eventData)
+            eventPayload.type = "CUSTOM"
+            sendToGA(eventName, intentHandler, eventPayload)
         }
     } catch (error) {
         if (ENABLE_LOGS) {
