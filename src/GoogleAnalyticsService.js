@@ -53,7 +53,7 @@ class GoogleAnalyticsService {
         };
 
         try {
-            const response = await this.httpClient.post('', payload);
+            this.httpClient.post('', payload);
         } catch (error) {
             console.error('Error al enviar el evento a GA4:', error.message);
         }

@@ -96,7 +96,7 @@ async function sendToGA(eventName, intentHandler, eventData) {
         delete eventData.mp_lib;
         delete eventData.$lib_version;
         delete eventData.distinct_id;
-        GA.sendEvent(eventName, userIdentifier, userData, eventData)
+        GA.sendEvent(eventName.replace('AMAZON.', ''), userIdentifier, userData, eventData)
     }
 }
 
